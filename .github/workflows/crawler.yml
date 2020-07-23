@@ -25,9 +25,11 @@ jobs:
           echo "${{ secrets.DEPLOY_KEY }}" > ~/.ssh/id_rsa
           chmod 400 ~/.ssh/id_rsa
       - name: Push to GitHub
+        env:
+            EMAIL: ${{ secrets.EMAIL }}
         run: |
           git config --local user.name "mkan0141"
-          git config --local user.email "${{ secrets.EMAIL }}"
+          git config --local user.email "${EMAIL}"
           git remote set-url origin git@github.com:${GITHUB_REPOSITORY}.git
           git add README.md
           git commit -m "Update README.md"
