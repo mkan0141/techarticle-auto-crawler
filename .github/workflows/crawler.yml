@@ -1,0 +1,34 @@
+name: tech-article-auto-crawler
+
+on:
+  schedule:
+    - cron: 0 0 * * *
+  push:
+
+jobs:
+  auto-crawl:
+    name: Auto Crawl
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set Node.js 12.x
+        uses: actions/setup-node@v1.3.0
+        with:
+          node-version: 12.x
+      - name: Install dependencies
+        run: npm install
+      - name: Execute auto crawler
+        run: npm run auto-crawler
+      - name: Deploy Configuration
+        run: |
+          mkdir ~/.ssh
+          ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+          echo "${{ secrets.DEPLOY_KEY }}" > ~/.ssh/id_rsa
+          chmod 400 ~/.ssh/id_rsa
+      - name: Push to GitHub
+        run: |
+          git config --local user.name "mkan0141"
+          git config --local user.email "${{ secrets.EMAIL }}"
+          git remote set-url origin git@github.com:${GITHUB_REPOSITORY}.git
+          git add README.md
+          git commit -m "Update README.md"
+          git push origin master
