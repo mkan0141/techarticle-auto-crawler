@@ -25,7 +25,8 @@ async function fetch_rss(url) {
 }
 async function main(sites) {
     const now = new Date();
-    let markdown = `# 新着技術記事(${now.getMonth()}/${now.getDay()} ${now.getHours()}:${now.getMinutes()} 更新)\n\n`;
+    let markdown = `![tech-article-auto-crawler](https://github.com/mkan0141/techarticle-auto-crawler/workflows/tech-article-auto-crawler/badge.svg) \n\n`;
+    markdown += `# 新着技術記事(${now.getMonth()}/${now.getDay()} ${now.getHours()}:${now.getMinutes()} 更新)\n\n`;
     for (const site of sites) {
         const articles = await fetch_rss(site.feed_url);
         if (!articles.length)
